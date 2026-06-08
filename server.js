@@ -11,12 +11,24 @@ app.use(express.json());
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL,
     pass: process.env.PASSWORD,
   },
+});
+
+console.log("EMAIL =", process.env.EMAIL);
+console.log("PASSWORD =", process.env.PASSWORD ? "FOUND" : "NOT FOUND");
+console.log("SMTP PORT = 465");
+
+transporter.verify(function (error, success) {
+  if (error) {
+    console.log("SMTP ERROR:", error);
+  } else {
+    console.log("SMTP READY");
+  }
 });
 
 app.post("/send", async (req, res) => {
